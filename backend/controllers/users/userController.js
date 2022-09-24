@@ -1,6 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const crypto = require("crypto");
 const fs= require("fs");
+const nodemailer = require("nodemailer")
 const generateToken = require("../../config/token/generateToken");
 const sgMail = require("@sendgrid/mail");
 const User = require("../../models/user/userModel");
@@ -8,7 +9,7 @@ const validateMongodbId = require("../../utils/validateMongodbId");
 const cloudinaryUploadImg = require("../../utils/cloudinary");
 // sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
 const {sendMailHelper} =require('../../utils/sendMailHelper')
-const nodemailer = require("nodemailer")
+// const blockUser = require('../../utils/blockUser')
 
 
 // User Registration
@@ -33,8 +34,15 @@ const userRegister = expressAsyncHandler(async (req, res) => {
 // User Login
 const loginUser = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
   //check if user exists
   const userFound = await User.findOne({ email });
+
+  // Check the user is blocked
+  if(userFound?.isBlocked){
+    throw new Error('You have been Blocked')
+  }
+
   //Check if password is match
   if (userFound && (await userFound.isPasswordMatched(password))) {
     res.json({
@@ -56,7 +64,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 // Fetch Users
 const fetchUsers = expressAsyncHandler(async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).populate('posts')
     res.json(users);
   } catch (error) {
     res.json(error);
@@ -94,9 +102,22 @@ const userDetails = expressAsyncHandler(async (req, res) => {
 const userProfile = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongodbId(id);
+  const loginUserId = req?.user?._id?.toString()
+
   try {
-    const myProfile = await User.findById(id).populate('posts')
-    res.json(myProfile);
+    const myProfile = await User.findById(id).populate('posts').populate('viewedBy')
+    const alreadyViewed = myProfile?.viewedBy?.find(user =>{
+      return user?._id?.toString() === loginUserId
+    })
+    if(alreadyViewed){
+      res.json(myProfile);
+    }else{
+      const profile = await User.findByIdAndUpdate(myProfile?._id, {
+        $push: { viewedBy: loginUserId },
+      });
+      res.json(profile);
+    }
+    
   } catch (error) {
     res.json(error);
   }
@@ -105,6 +126,10 @@ const userProfile = expressAsyncHandler(async (req, res) => {
 // Update profile
 const updateProfile = expressAsyncHandler(async (req, res) => {
   const { _id } = req?.user;
+
+  // Ckeck user is blocked
+  blockUser(req?.user)
+
   validateMongodbId(_id);
   const user = await User.findByIdAndUpdate(
     _id,
@@ -201,9 +226,9 @@ const unfollowUser = expressAsyncHandler(async (req, res) => {
 
 //Block user
 const blockUser = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params; 
   validateMongodbId(id);
-
+ 
   const user = await User.findByIdAndUpdate(
     id,
     {
@@ -252,7 +277,7 @@ const generateVerificationToken = expressAsyncHandler(async (req, res) => {
 		// save user
 		await user.save();
 		//build your message
-		const resetURL = `If you were requested to verify your account, verify now within 10 minutes, otherwise ignore this message <a href="http://localhost:3000/verify-account/${verificationToken}">Click to verify your account</a>`;
+		const resetURL = `If you were requested to verify your account, verify now within 10 minutes, otherwise ignore this message <a href="http://localhost:3000/verifyaccount/${verificationToken}">Click to verify your account</a>`;
 		let mailOptions = {
 			from: "info.devlibro@gmail.com",
 			to: user?.email,
@@ -299,34 +324,30 @@ const accountVerification = expressAsyncHandler(async (req, res) => {
 //------------------------------
 
 const forgetPasswordToken = expressAsyncHandler(async (req, res) => {
-  //find the user by email
-  const { email } = req.body;
-
-  const user = await User.findOne({ email });
-  if (!user) throw new Error("User Not Found");
-
-  try {
-    //Create token
-    const token = await user.createPasswordResetToken();
-    console.log(token);
-    await user.save();
-
-    //build your message
-    const resetURL = `If you were requested to reset your password, reset now within 10 minutes, otherwise ignore this message <a href="http://localhost:3000/reset-password/${token}">Click to Reset</a>`;
-    const msg = {
-      to: email,
-      from: "vishnukp2529@gmail.com",
-      subject: "Reset Password",
-      html: resetURL,
-    };
-
-    await sgMail.send(msg);
-    res.json({
-      msg: `A verification message is successfully sent to ${user?.email}. Reset now within 10 minutes, ${resetURL}`,
-    });
-  } catch (error) {
-    res.json(error);
-  }
+	// find the user by email
+	const { email } = req.body;
+	const user = await User.findOne({ email });
+	if (!user) throw new Error("User not found");
+	try {
+		const token = await user.createPasswordResetToken();
+		await user.save();
+		//build your message
+		const resetURL = `If you were requested to reset your password, reset now within 10
+		minutes, otherwise ignore this message <a href="http://localhost:3000/resetpassword/${token}"> Click Here to reset </a>`;
+		const msg = {
+			to: email,
+			from: "info.devlibro@gmail.com",
+			subject: "Reset Password",
+			html: resetURL,
+      message:'Reset your Password'
+		};
+    await sendMailHelper(msg)
+		res.json({
+			msg: `A verification message is successfully sent to ${user?.email}. Reset now within 10 minutes, ${resetURL}`,
+		});
+	} catch (error) {
+		res.json(error);
+	}
 });
 
 //------------------------------
@@ -357,8 +378,13 @@ const passwordReset = expressAsyncHandler(async (req, res) => {
 const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
   //Find the login user
   const { _id } = req.user;
+
+  // Ckeck user is blocked
+  blockUser(req.user)
+
   //1. Get the Path to image
   const localPath = `public/images/profile/${req.file.filename}`;
+
   //2.Upload to cloudinary
   const imgUploaded = await cloudinaryUploadImg(localPath);
   

@@ -67,12 +67,16 @@ const PostDetails = () => {
                   />
                   <div className="text-left">
                     <h2 className='text-gray-700 font-semibold'>Posted By</h2>
-                    <h4 className="mb-1 text-2xl font-bold text-gray-50">
-                      <span className="text-xl lg:text-2xl font-bold text-black">
-                        {postDetails?.user?.firstName}{" "}
-                        {postDetails?.user?.lastName}{" "}
-                      </span>
-                    </h4>
+
+                    <Link to={`/profile/${postDetails?.user?._id}`}>
+                      <h4 className="mb-1 text-2xl font-bold text-gray-50">
+                        <span className="text-xl lg:text-2xl font-bold text-black">
+                          {postDetails?.user?.firstName}{" "}
+                          {postDetails?.user?.lastName}{" "}
+                        </span>
+                      </h4>
+                    </Link>
+
                     <p className="text-black font-bold">
                       {<DateFormatter date={post?.createdAt} />}
                     </p>

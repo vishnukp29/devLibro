@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormik } from "formik";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { loginUserAction } from "../../../redux/slices/users/userSlices";
@@ -13,14 +13,14 @@ const formSchema = Yup.object({
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   //formik
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: values => {
+    onSubmit: (values) => {
       //dispath the action
       dispatch(loginUserAction(values));
     },
@@ -28,11 +28,11 @@ const Login = () => {
   });
 
   //redirect
-  const store = useSelector(state => state?.users);
+  const store = useSelector((state) => state?.users);
   const { userAuth, loading, serverErr, appErr } = store;
-  if (userAuth){
-    navigate('/')
-  } 
+  if (userAuth) {
+    navigate("/posts");
+  }
   return (
     <>
       <section className="min-h-screen  py-20 2xl:py-40 bg-white overflow-hidden">
@@ -140,6 +140,14 @@ const Login = () => {
                       </button>
                     )}
                   </form>
+                  <div className="text-sm mt-4">
+                    <Link
+                      to="/forgetpasswordtoken"
+                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      Forget Password ?
+                    </Link>
+                  </div>
                 </div>
               </div>
               <div className="w-full lg:w-3/5 px-4 mb-16 lg:mb-0 order-first lg:order-last">

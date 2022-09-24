@@ -20,9 +20,11 @@ import UploadProfilePhoto from "./pages/Users/Profile/UploadProfilePhoto";
 import UpdateProfileForm from "./pages/Users/Profile/UpdateProfileForm";
 import CommentUpdate from "./pages/Comments/CommentUpdate";
 import SendEmail from "./pages/Users/Email/SendEmail";
-
-
-
+import AccountVerified from "./pages/Users/AccountVerification/AccountVerified";
+import UsersList from "./pages/Users/UsersList/UsersList";
+import UpdatePassword from "./pages/Users/PasswordManagement/UpdatePassword";
+import ResetPassword from "./pages/Users/PasswordManagement/ResetPassword";
+import ResetPasswordForm from "./pages/Users/PasswordManagement/ResetPasswordForm";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path='/' element={<HomePage/>}/>
           <Route path='/register' element={<Register/>}/>
           <Route path='/login' element={<Login/>}/>
+          <Route path='/forgetpasswordtoken' element={<ResetPasswordForm/>}/>
+          <Route path='/resetpassword/:token' element={<ResetPassword/>}/>
           
           <Route path='/add-category' element={
             <AdminProtected>
@@ -73,6 +77,12 @@ function App() {
             </PrivateProtectRoute>
           }/>
 
+          <Route path='/verifyaccount/:token' element={
+            <PrivateProtectRoute>
+              <AccountVerified/>
+            </PrivateProtectRoute>
+          }/>
+
           {/* <Route path='/upload-profile-photo/:id' element={<UploadProfilePhoto/>}/> */}
           <Route path='/upload-profile-photo/:id' element={
             <PrivateProtectRoute>
@@ -88,9 +98,9 @@ function App() {
           }/>
 
           <Route path='/send-email' element={
-            <AdminProtected>
+            <PrivateProtectRoute>
               <SendEmail/>
-            </AdminProtected>
+            </PrivateProtectRoute>
           }/>
 
           {/* <Route path='/update-comment/:id' element={<UpdateComment/>}/> */}
@@ -100,11 +110,23 @@ function App() {
             </PrivateProtectRoute>
           }/>
 
+          <Route path='updatepassword' element={
+            <PrivateProtectRoute>
+              <UpdatePassword/>
+            </PrivateProtectRoute>
+          }/>
+
           {/* <Route path='update-comment/:id' element={
             <PrivateProtectRoute>
               <CommentUpdate/>
             </PrivateProtectRoute>
           }/> */}
+
+          <Route path='/users' element={
+            <AdminProtected>
+              <UsersList/>
+            </AdminProtected>
+          }/>
 
           <Route path='/posts' element={<PostsList/>}/>
           <Route path='/posts/:id' element={<PostDetails/>}/>

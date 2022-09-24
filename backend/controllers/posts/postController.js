@@ -5,14 +5,17 @@ const fs = require("fs");
 const validateMongodbId = require("../../utils/validateMongodbId");
 const User = require("../../models/user/userModel");
 const cloudinaryUploadImg = require("../../utils/cloudinary");
+const blockUser = require("../../utils/blockUser");
 
 
 // Create Post
 const createPost = expressAsyncHandler(async (req, res) => {
-  // console.log(req.file); 
+
   const { _id } = req.user;
-  console.log(_id);
-  // validateMongodbId(req.body.user);
+  
+  // Ckeck user is blocked
+  blockUser(req.user)
+  
   //Check for bad words
   const filter = new Filter();
   const isProfane = filter.isProfane(req.body.title, req.body.description);
@@ -49,10 +52,16 @@ const fetchPosts = expressAsyncHandler(async (req, res) => {
   const hasCategory=req.query.category
   try {
     if(hasCategory!='undefined'){
-      const posts = await Post.find({category:hasCategory}).populate('user').populate('comments')
+      const posts = await Post.find({category:hasCategory})
+      .populate('user')
+      .populate('comments')
+      .sort('-createdAt')
       res.json(posts);
     }else{
-      const posts = await Post.find({}).populate('user').populate('comments')
+      const posts = await Post.find({})
+      .populate('user')
+      .populate('comments')
+      .sort('-createdAt')
       res.json(posts);
     }
   } catch (error) {

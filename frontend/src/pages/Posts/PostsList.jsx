@@ -91,7 +91,9 @@ export default function PostsList() {
                 {/* Post goes here */}
 
                 {  appErr || serverErr ? (
-                  <h1>{serverErr} {appErr}</h1>
+                  <h1 className="text-red-600 text-2xl text-center">
+                    {serverErr} {appErr}
+                  </h1>
                 ) : postLists?.length <= 0 ? (
                   <h1 className='text-3xl font-bold text-center'>No Posts Found</h1>
                 ) : (
@@ -175,9 +177,10 @@ export default function PostsList() {
                           <div className="ml-3">
                             
                             <p className="text-sm font-medium text-gray-900">
-                              <div className="text-slate-800 hover:underline ">
+                              <Link  to={`/profile/${post?.user?._id}`} 
+                                className="text-slate-800 hover:underline ">
                                 {post?.user?.firstName} {post?.user?.lastName}
-                              </div>
+                              </Link>
                             </p>
                             
                             <div className="flex space-x-1 text-sm text-gray-500 font-semibold">

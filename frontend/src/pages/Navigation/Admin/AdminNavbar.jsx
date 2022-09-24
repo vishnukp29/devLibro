@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
 import {
-  BellIcon,
   MenuIcon,
   XIcon,
   BookOpenIcon,
@@ -31,8 +30,8 @@ const AdminNavbar = ({isLogin}) => {
   //Navigation
   const userNavigation = [
     { name: "Your Profile", href: `/profile/${isLogin?._id}` },
-    { name: "Change your password", href: "/update-password" },
-    { name: "Settings", href: "/update-password" },
+    { name: "Change your password", href: "/updatepassword" },
+    // { name: "Settings", href: "/update-password" },
   ];
   //logout
   const dispatch = useDispatch();
@@ -175,25 +174,24 @@ const AdminNavbar = ({isLogin}) => {
                 </Link>
               ))}
             </div>
+            
+            {/* Mobile view */}
             <div className="pt-4 pb-3 border-t border-gray-700">
               <div className="flex items-center px-5 sm:px-6">
                 <div className="flex-shrink-0">
                   {/* Image */}
-                  <img className="h-10 w-10 rounded-full" src="" alt="" />
+                  <img className="h-10 w-10 rounded-full" src={isLogin?.profilePicture} alt="" />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium text-white">
-                    {/* {user.name} */}
+                  <div className="text-base font-medium text-black">
+                  {isLogin?.firstName} {isLogin?.lastName}
                   </div>
                   <div className="text-sm font-medium text-gray-400">
-                    {/* {user.email} */}
+                  {isLogin?.email}
                   </div>
                 </div>
-                <button className="ml-auto flex-shrink-0 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
               </div>
+
               <div className="mt-3 px-2 space-y-1 sm:px-3">
                 {userNavigation.map(item => (
                   <a

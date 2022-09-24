@@ -109,6 +109,11 @@ userSchema.virtual("posts", {
   localField: "_id",
 });
 
+//Account Type
+userSchema.virtual("accountType").get(function () {
+  const totalFollowers = this.followers?.length;
+  return totalFollowers >= 10 ? "Pro Account" : "Starter Account";
+});
 
 //Hash Password
 userSchema.pre("save", async function (next) {

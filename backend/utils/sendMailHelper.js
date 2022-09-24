@@ -16,7 +16,7 @@ let transporter = nodemailer.createTransport({
 
 const sendMailHelper = (msg) => {
 	return new Promise((resolve, reject) => {
-		const { to, from, subject, message, sentBy } = msg;
+		const { to, from, subject, html,message, sentBy } = msg;
 		// Get the message
 		const emailMessage = subject + " " + message;
 		// Prevent profanity /bad words
@@ -30,7 +30,7 @@ const sendMailHelper = (msg) => {
 				to,
 				from,
 				subject,
-				text: message,
+				html,
 			};
 			// send msg
 			transporter.sendMail(mailOptions, function (err, data) {

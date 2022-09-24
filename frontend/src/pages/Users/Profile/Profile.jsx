@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   HeartIcon,
   EmojiSadIcon,
@@ -18,7 +18,7 @@ import LoadingComponent from "../../../utils/LoadingComponent";
 
 export default function Profile() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  console.log(id);
   const dispatch = useDispatch();
 
   //User data from store
@@ -30,6 +30,7 @@ export default function Profile() {
     profileServerErr,
     followed,
     unFollowed,
+    userAuth,
   } = users;
 
   //fetch user profile
@@ -38,7 +39,9 @@ export default function Profile() {
   }, [id, dispatch, followed, unFollowed]);
 
   //send mail handle click
-  
+
+  //isLogin
+  const isLoginUser = userAuth?._id === profile?._id;
 
   return (
     <>
@@ -62,7 +65,7 @@ export default function Profile() {
                           className="h-32 w-full object-cover lg:h-48"
                           src="https://wallpaperaccess.com/full/1338411.jpg"
                           // src={profile?.profilePicture}
-                          // alt={profile?.firstName}
+                          alt=''
                         />
                       </div>
                       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,8 +81,8 @@ export default function Profile() {
                             <div className=" flex flex-col 2xl:block mt-10 min-w-0 flex-1">
                               <h1 className="text-2xl font-bold text-gray-900 ">
                                 {profile?.firstName} {profile?.lastName}
-                                <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                                  {/* {profile?.accountType} */}
+                                <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 mx-3">
+                                  {profile?.accountType}
                                 </span>
                                 {/* Display if verified or not */}
                                 {profile?.isAccountVerified ? (
@@ -97,24 +100,25 @@ export default function Profile() {
                                 <DateFormatter date={profile?.createdAt} />{" "}
                               </p>
                               <p className="text-gray-600 mt-2 mb-2">
-                                {profile?.posts.length} Posts{" "}
-                                {profile?.followers.length} Followers{" "}
-                                {profile?.following.length} Following
+                                {profile?.posts?.length} Posts{" "}
+                                {profile?.followers?.length} Followers{" "}
+                                {profile?.following?.length} Following
                               </p>
                               {/* Who view my profile */}
                               <div className="flex items-center  mb-2">
                                 <EyeIcon className="h-5 w-5 " />
                                 <div className="pl-2">
                                   {/* {profile?.viewedBy?.length}{" "} */}
-                                  <span className="text-indigo-400 cursor-pointer hover:underline">
-                                    Users viewed your Profile
+                                  <span className="text-indigo-400 cursor-pointer ">
+                                    Number of Viewers: {profile?.viewedBy?.length}
                                   </span>
                                 </div>
                               </div>
 
                               {/* is login user */}
                               {/* Upload profile photo */}
-                              <Link
+                              {isLoginUser && 
+                                <Link
                                 to={`/upload-profile-photo/${profile?._id}`}
                                 className="inline-flex justify-center w-48 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                               >
@@ -123,49 +127,55 @@ export default function Profile() {
                                   aria-hidden="true"
                                 />
                                 <span>Upload Photo</span>
-                              </Link>
+                              </Link>}
+                              
                             </div>
 
                             <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                               {/* // Hide follow button from the same */}
-                              <div>
-                                {profile?.isFollowing ? (
-                                  <button
-                                    onClick={() =>
-                                      dispatch(unfollowUserAction(id))
-                                    }
-                                    className="mr-2 inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                                  >
-                                    <EmojiSadIcon
-                                      className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                                      aria-hidden="true"
-                                    />
-                                    <span>Unfollow</span>
-                                  </button>
-                                ) : (
-                                  <button
-                                    onClick={() =>
-                                      dispatch(followUserAction(id))
-                                    }
-                                    type="button"
-                                    className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                                  >
-                                    <HeartIcon
-                                      className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                                      aria-hidden="true"
-                                    />
-                                    <span>Follow </span>
-                                    <span className="pl-2">
-                                      {profile?.followers?.length}
-                                    </span>
-                                  </button>
-                                )}
-                              </div>
+                              {!isLoginUser && (
+                                <div>
+                                  {profile?.isFollowing ? (
+                                    <button
+                                      onClick={() =>
+                                        dispatch(unfollowUserAction(id))
+                                      }
+                                      className="mr-2 inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                                    >
+                                      <EmojiSadIcon
+                                        className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                                        aria-hidden="true"
+                                      />
+                                      <span>Unfollow</span>
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={() =>
+                                        dispatch(followUserAction(id))
+                                      }
+                                      type="button"
+                                      className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                                    >
+                                      <HeartIcon
+                                        className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                                        aria-hidden="true"
+                                      />
+                                      <span>Follow </span>
+                                      <span className="pl-2">
+                                        {profile?.followers?.length}
+                                      </span>
+                                    </button>
+                                  )}
+
+                                  <></>
+                                </div>
+                              )}
 
                               {/* Update Profile */}
 
                               <>
-                                <Link
+                                {isLoginUser && 
+                                  <Link
                                   to={`/update-profile/${profile?._id}`}
                                   className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                                 >
@@ -174,12 +184,16 @@ export default function Profile() {
                                     aria-hidden="true"
                                   />
                                   <span>Update Profile</span>
-                                </Link>
+                                </Link>}
+                                
                               </>
                               {/* Send Mail */}
-                              <Link to='/send-email'
-                                state={{email: profile?.email,
-                                id: profile?.id}}
+                              <Link
+                                to="/send-email"
+                                state={{
+                                  email: profile?.email,
+                                  id: profile?.id,
+                                }}
                                 className="inline-flex justify-center bg-white px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700  hover:bg-gray-50 focus:outline-none "
                               >
                                 <MailIcon
@@ -207,28 +221,37 @@ export default function Profile() {
                     <div className="flex justify-center place-items-start flex-wrap  md:mb-0">
                       <div className="w-full md:w-1/3 px-4 mb-4 md:mb-0">
                         <h1 className="text-center text-xl border-gray-500 mb-2 border-b-2">
-                          Who viewed my profile : 9
+                          Who viewed my profile : {profile?.viewedBy?.length}
                         </h1>
 
                         {/* Who view my post */}
                         <ul className="">
-                          <Link to="">
-                            <div className="flex mb-2 items-center space-x-4 lg:space-x-6">
-                              <img
-                                className="w-16 h-16 rounded-full lg:w-20 lg:h-20"
-                                // src={user.profilePhoto}
-                                // alt={user?._id}
-                              />
-                              <div className="font-medium text-lg leading-6 space-y-1">
-                                <h3>
-                                  {/* {user?.firstName} {user?.lastName} */}Name
-                                </h3>
-                                <p className="text-indigo-600">
-                                  {/* {user.accountType} */} Account Type
-                                </p>
-                              </div>
-                            </div>
-                          </Link>
+                          {profile?.viewedBy?.length <= 0 ? (
+                            <h1>No One Viewed Your Profile</h1>
+                          ) : (
+                            profile?.viewedBy?.map((user) => (
+                              <li>
+                                <Link to="">
+                                  <div className="flex mb-2 items-center space-x-4 lg:space-x-6">
+                                    <img
+                                      className="w-16 h-16 rounded-full lg:w-20 lg:h-20"
+                                      src={user.profilePicture}
+                                      alt={user?._id}
+                                    />
+                                    <div className="font-medium text-lg leading-6 space-y-1">
+                                      <h3>
+                                        {user?.firstName} {user?.lastName}
+                                        
+                                      </h3>
+                                      <p className="text-indigo-600">
+                                        {user.accountType} 
+                                      </p>
+                                    </div>
+                                  </div>
+                                </Link>
+                              </li>
+                            ))
+                          )}
                         </ul>
                       </div>
                       {/* All my Post */}
