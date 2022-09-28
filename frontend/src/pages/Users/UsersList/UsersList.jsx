@@ -17,8 +17,8 @@ const UsersList = () => {
   }, [block, unblock]);
 
   return (
-    <>
-      <section class="py-8 bg-white min-h-screen">
+    <section className="py-8 bg-white min-h-screen">
+      <div className="container px-4 mx-auto">
         {loading ? (
           <LoadingComponent />
         ) : appErr || serverErr ? (
@@ -34,8 +34,8 @@ const UsersList = () => {
             </>
           ))
         )}
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 

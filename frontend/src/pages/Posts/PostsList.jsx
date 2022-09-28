@@ -33,7 +33,7 @@ export default function PostsList() {
 
   return (
     <>
-      <section >
+      <section>
         <div class="py-20 bg-white min-h-screen radius-for-skewed ">
           <div class="container mx-auto px-4">
             <div class="mb-16 flex flex-wrap items-center">
@@ -60,7 +60,7 @@ export default function PostsList() {
             
             <div class="flex flex-wrap -mx-3">
               <div class="mb-8 lg:mb-0 w-full lg:w-1/4 px-3">
-                <div class="py-4 px-6 bg-gray-50 shadow rounded border border-gray-300 ">
+                <div class="py-4 px-6 bg-gray-50 shadow rounded border border-gray-300 sticky top-0 ">
                   <h4 class="mb-4 text-slate-700 font-bold uppercase flex justify-center">
                     Categories
                   </h4>

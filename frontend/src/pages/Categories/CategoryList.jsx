@@ -1,7 +1,7 @@
 import { React, useEffect } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { PencilAltIcon, ArchiveIcon} from "@heroicons/react/outline";
+import { PencilAltIcon, ArchiveIcon } from "@heroicons/react/outline";
 import { fetchCategoriesAction } from "../../redux/slices/category/categorySlice";
 import DateFormatter from "../../utils/DateFormatter";
 import LoadingComponent from "../../utils/LoadingComponent";
@@ -11,26 +11,26 @@ const CategoryList = () => {
   useEffect(() => {
     dispatch(fetchCategoriesAction());
   }, [dispatch]);
-  const category = useSelector(state => state?.category);
+  const category = useSelector((state) => state?.category);
 
   const { categoryList, loading, appErr, serverErr } = category;
-  const navigate=useNavigate()
-  const CategoryUpdate=(id)=>{
-    navigate(`/update-category/${id}`)
-  }
+  const navigate = useNavigate();
+  const CategoryUpdate = (id) => {
+    navigate(`/update-category/${id}`);
+  };
 
-  const CategoryDelete=(id)=>{
-    navigate(`/update-category/${id}`)
-  }
+  const CategoryDelete = (id) => {
+    navigate(`/update-category/${id}`);
+  };
 
   return (
-    <>
+    <section className="min-h-screen  bg-white overflow-hidden">
       {loading ? (
         <>
           <LoadingComponent />
         </>
-        // <h2 className="text-center text-3xl text-green-800">Loading</h2>
-      ) : appErr || serverErr ? (
+      ) : // <h2 className="text-center text-3xl text-green-800">Loading</h2>
+      appErr || serverErr ? (
         <h2 className="text-center text-3xl text-red-600">
           {serverErr} {serverErr}
         </h2>
@@ -40,8 +40,11 @@ const CategoryList = () => {
         </h2>
       ) : (
         <div className="flex flex-col min-w-0 flex-1">
-          <div className=" text-center text-4xl mt-10 font-bold"> Category List</div>
-          <div className="flex-1 flex overflow-hidden">
+          <div className=" text-center text-4xl mt-10 font-bold">
+            {" "}
+            Category List
+          </div>
+          <div className="container px-4 mx-auto">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -83,26 +86,33 @@ const CategoryList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {categoryList?.map(category => (
+                    {categoryList?.map((category) => (
                       <tr className="bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {category.title}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {<DateFormatter date={category?.createdAt}/>}
+                          {<DateFormatter date={category?.createdAt} />}
                         </td>
 
                         {/* Navigate Edit*/}
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <PencilAltIcon onClick={()=>{CategoryUpdate(category?._id)}} 
-                          className="h-5 text-indigo-500 cursor-pointer" />
+                          <PencilAltIcon
+                            onClick={() => {
+                              CategoryUpdate(category?._id);
+                            }}
+                            className="h-5 text-indigo-500 cursor-pointer"
+                          />
                         </td>
-                        
+
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <ArchiveIcon onClick={()=>{CategoryDelete(category?._id)}}
-                          className="h-5 text-indigo-500 cursor-pointer" />
+                          <ArchiveIcon
+                            onClick={() => {
+                              CategoryDelete(category?._id);
+                            }}
+                            className="h-5 text-indigo-500 cursor-pointer"
+                          />
                         </td>
-                        
                       </tr>
                     ))}
                   </tbody>
@@ -112,11 +122,8 @@ const CategoryList = () => {
           </div>
         </div>
       )}
-    </>
+    </section>
   );
 };
 
 export default CategoryList;
-
-
-

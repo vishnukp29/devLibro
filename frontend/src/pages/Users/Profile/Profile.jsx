@@ -44,8 +44,8 @@ export default function Profile() {
   const isLoginUser = userAuth?._id === profile?._id;
 
   return (
-    <>
-      <div className=" bg-white ">
+    <section className="min-h-screen bg-white overflow-hidden">
+      <div className="container px-4 mx-auto">
         {profileLoading ? (
           <LoadingComponent />
         ) : profileAppErr || profileServerErr ? (
@@ -65,7 +65,7 @@ export default function Profile() {
                           className="h-32 w-full object-cover lg:h-48"
                           src="https://wallpaperaccess.com/full/1338411.jpg"
                           // src={profile?.profilePicture}
-                          alt=''
+                          alt=""
                         />
                       </div>
                       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -110,25 +110,26 @@ export default function Profile() {
                                 <div className="pl-2">
                                   {/* {profile?.viewedBy?.length}{" "} */}
                                   <span className="text-indigo-400 cursor-pointer ">
-                                    Number of Viewers: {profile?.viewedBy?.length}
+                                    Number of Viewers:{" "}
+                                    {profile?.viewedBy?.length}
                                   </span>
                                 </div>
                               </div>
 
                               {/* is login user */}
                               {/* Upload profile photo */}
-                              {isLoginUser && 
+                              {isLoginUser && (
                                 <Link
-                                to={`/upload-profile-photo/${profile?._id}`}
-                                className="inline-flex justify-center w-48 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                              >
-                                <UploadIcon
-                                  className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                                <span>Upload Photo</span>
-                              </Link>}
-                              
+                                  to={`/upload-profile-photo/${profile?._id}`}
+                                  className="inline-flex justify-center w-48 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                                >
+                                  <UploadIcon
+                                    className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                  <span>Upload Photo</span>
+                                </Link>
+                              )}
                             </div>
 
                             <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -174,18 +175,18 @@ export default function Profile() {
                               {/* Update Profile */}
 
                               <>
-                                {isLoginUser && 
+                                {isLoginUser && (
                                   <Link
-                                  to={`/update-profile/${profile?._id}`}
-                                  className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                                >
-                                  <UserIcon
-                                    className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                  <span>Update Profile</span>
-                                </Link>}
-                                
+                                    to={`/update-profile/${profile?._id}`}
+                                    className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                                  >
+                                    <UserIcon
+                                      className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                                      aria-hidden="true"
+                                    />
+                                    <span>Update Profile</span>
+                                  </Link>
+                                )}
                               </>
                               {/* Send Mail */}
                               <Link
@@ -241,10 +242,9 @@ export default function Profile() {
                                     <div className="font-medium text-lg leading-6 space-y-1">
                                       <h3>
                                         {user?.firstName} {user?.lastName}
-                                        
                                       </h3>
                                       <p className="text-indigo-600">
-                                        {user.accountType} 
+                                        {user.accountType}
                                       </p>
                                     </div>
                                   </div>
@@ -310,6 +310,6 @@ export default function Profile() {
           </div>
         )}
       </div>
-    </>
+    </section>
   );
 }

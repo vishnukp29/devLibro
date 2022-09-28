@@ -16,15 +16,12 @@ export default function AccountVerified() {
 
   //store
   const accountVerification = useSelector(state => state.accountVerification);
-  const { loading, appErr, serverErr, isVerified, verified } =
-    accountVerification;
-
-  const Navigate = useNavigate()
+  const { loading, appErr, serverErr, isVerified, verified } = accountVerification;
 
   return (
-    <>
+    <section className="min-h-screen  py-20 2xl:py-40 bg-white overflow-hidden">
       {verified ? (
-        <div className="flex justify-center items-center min-h-screen bg-gray-400">
+        <div className="container px-4 mx-auto">
           <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
             <div>
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
@@ -70,6 +67,6 @@ export default function AccountVerified() {
           </Link>
         </div>
       )}
-    </>
+    </section>
   );
 }

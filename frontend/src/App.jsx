@@ -18,7 +18,6 @@ import UpdatePost from "./pages/Posts/UpdatePost";
 import UpdateComment from "./pages/Comments/UpdateComment";
 import UploadProfilePhoto from "./pages/Users/Profile/UploadProfilePhoto";
 import UpdateProfileForm from "./pages/Users/Profile/UpdateProfileForm";
-import CommentUpdate from "./pages/Comments/CommentUpdate";
 import SendEmail from "./pages/Users/Email/SendEmail";
 import AccountVerified from "./pages/Users/AccountVerification/AccountVerified";
 import UsersList from "./pages/Users/UsersList/UsersList";
@@ -115,12 +114,6 @@ function App() {
               <UpdatePassword/>
             </PrivateProtectRoute>
           }/>
-
-          {/* <Route path='update-comment/:id' element={
-            <PrivateProtectRoute>
-              <CommentUpdate/>
-            </PrivateProtectRoute>
-          }/> */}
 
           <Route path='/users' element={
             <AdminProtected>

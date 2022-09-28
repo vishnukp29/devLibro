@@ -18,7 +18,7 @@ const ResetPasswordForm = () => {
     initialValues: {
       email: "",
     },
-    onSubmit: values => {
+    onSubmit: (values) => {
       //dispath the action
       dispatch(passwordResetTokenAction(values?.email));
     },
@@ -26,106 +26,108 @@ const ResetPasswordForm = () => {
   });
 
   //select data from store
-  const users = useSelector(state => state?.users);
+  const users = useSelector((state) => state?.users);
   const { passwordToken, loading, appErr, serverErr } = users;
-  
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Password Reset Form
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            <h3 className="font-medium text-indigo-600 hover:text-indigo-500">
-              Reset your password if you have forgotten
-            </h3>
-          </p>
-        </div>
-        {/* Err msg */}
-        <div className="text-red-500 text-center">
-          {appErr || serverErr ? (
-            <h3>
-              {serverErr} {appErr}
-            </h3>
-          ) : null}
-        </div>
-
-        {/* Sucess msg */}
-        <div className="text-green-700 text-center">
-          {passwordToken && (
-            <h3>
-              Email is successfully sent to your email. Verify it within 10
-              minutes.
-            </h3>
-          )}
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={formik.handleSubmit}>
-          <input type="hidden" name="remember" defaultValue="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email-address" className="sr-only">
-                Enter Your Email Address
-              </label>
-              <input
-                type="email"
-                autoComplete="email"
-                value={formik.values.email}
-                onChange={formik.handleChange("email")}
-                onBlur={formik.handleBlur("email")}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-              />
-              {/* Err msg */}
-              <div className="text-red-400 mb-2">
-                {formik.touched.email && formik.errors.email}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <Link
-                to="/updatepassword"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Or Update Your Password ?
-              </Link>
-            </div>
-          </div>
-
+    <section className="min-h-screen  py-20 2xl:py-40 bg-white overflow-hidden">
+      <div className="container px-4 mx-auto">
+        <div className="max-w-md w-full space-y-8 mx-auto">
           <div>
-            {loading ? (
-              <button
-                disabled
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 "
-              >
-                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <LockClosedIcon
-                    className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                    aria-hidden="true"
-                  />
-                </span>
-                Loading please wait...
-              </button>
-            ) : (
-              <button
-                type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <LockClosedIcon
-                    className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                    aria-hidden="true"
-                  />
-                </span>
-                Reset Password
-              </button>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              Password Reset Form
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              <h3 className="font-medium text-black hover:text-slate-700">
+                Reset your password if you have forgotten
+              </h3>
+            </p>
+          </div>
+          {/* Err msg */}
+          <div className="text-red-500 text-center">
+            {appErr || serverErr ? (
+              <h3>
+                {serverErr} {appErr}
+              </h3>
+            ) : null}
+          </div>
+
+          {/* Sucess msg */}
+          <div className="text-green-700 text-center">
+            {passwordToken && (
+              <h3>
+                Email is successfully sent to your email. Verify it within 10
+                minutes.
+              </h3>
             )}
           </div>
-        </form>
+          <form className="mt-8 space-y-6" onSubmit={formik.handleSubmit}>
+            <input type="hidden" name="remember" defaultValue="true" />
+            <div className="rounded-md shadow-sm -space-y-px">
+              <div>
+                <label htmlFor="email-address" className="sr-only">
+                  Enter Your Email Address
+                </label>
+                <input
+                  type="email"
+                  autoComplete="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Email address"
+                />
+                {/* Err msg */}
+                <div className="text-red-400 mb-2">
+                  {formik.touched.email && formik.errors.email}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="text-sm">
+                <Link
+                  to="/updatepassword"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  Or Update Your Password ?
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              {loading ? (
+                <button
+                  disabled
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 "
+                >
+                  <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                    <LockClosedIcon
+                      className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                  Loading please wait...
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                    <LockClosedIcon
+                      className="h-5 w-5 text-gray-500 group-hover:text-indigo-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                  Reset Password
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

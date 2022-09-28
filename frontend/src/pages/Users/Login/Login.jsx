@@ -36,8 +36,6 @@ const Login = () => {
   return (
     <>
       <section className="min-h-screen  py-20 2xl:py-40 bg-white overflow-hidden">
-        {/* <div className="left-0 lg:bottom-0 h-full lg:h-auto w-full lg:w-4/12 bg-white lg:overflow-hidden">
-        </div> */}
         <div className="container px-4 mx-auto">
           <div className="max-w-5xl mx-auto">
             <div className="flex flex-wrap items-center -mx-4">

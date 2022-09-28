@@ -64,8 +64,8 @@ export default function CreatePost() {
     navigate("/posts");
   } 
   return (
-    <>
-      <div className="min-h-screen bg-white flex flex-col justify-center py-12 sm:px-6 lg:px-8 container px-4 mx-auto">
+    <section className="min-h-screen  py-20 2xl:py-40 bg-white overflow-hidden">
+      <div className="container px-4 mx-auto">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Create Post
@@ -204,6 +204,6 @@ export default function CreatePost() {
           </div>
         </div>
       </div>
-    </>
+    </section>
   );
 }
