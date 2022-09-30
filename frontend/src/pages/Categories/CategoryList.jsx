@@ -5,6 +5,8 @@ import { PencilAltIcon, ArchiveIcon } from "@heroicons/react/outline";
 import { fetchCategoriesAction } from "../../redux/slices/category/categorySlice";
 import DateFormatter from "../../utils/DateFormatter";
 import LoadingComponent from "../../utils/LoadingComponent";
+// import CategoryDeleteModal from "../Navigation/Alerts/CategoryDeleteModal";
+
 
 const CategoryList = () => {
   const dispatch = useDispatch();

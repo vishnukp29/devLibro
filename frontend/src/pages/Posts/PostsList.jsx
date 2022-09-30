@@ -2,27 +2,35 @@ import { useEffect } from "react";
 import { ThumbUpIcon, ThumbDownIcon, EyeIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostsAction, toggleAddDisLikesToPost, toggleAddLikesToPost } from "../../redux/slices/posts/postSlices";
+import {
+  fetchPostsAction,
+  toggleAddDisLikesToPost,
+  toggleAddLikesToPost,
+} from "../../redux/slices/posts/postSlices";
 import { fetchCategoriesAction } from "../../redux/slices/category/categorySlice";
 
 import DateFormatter from "../../utils/DateFormatter";
-import LoadingComponent from '../../utils/LoadingComponent'
-
+import LoadingComponent from "../../utils/LoadingComponent";
 
 export default function PostsList() {
   //select post from store
   const post = useSelector((state) => state?.post);
-  const { postLists, loading, appErr, serverErr,likes, disLikes } = post;
+  const { postLists, loading, appErr, serverErr, likes, disLikes } = post;
 
   //select categories from store
-  const category = useSelector(state => state?.category);
-  const {categoryList,loading: catLoading,appErr: catAppErr,serverErr: catServerErr,} = category;
+  const category = useSelector((state) => state?.category);
+  const {
+    categoryList,
+    loading: catLoading,
+    appErr: catAppErr,
+    serverErr: catServerErr,
+  } = category;
   console.log(category);
   //dispatch
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchPostsAction());
-  }, [dispatch,likes, disLikes]);
+  }, [dispatch, likes, disLikes]);
 
   // Fetch categories
   useEffect(() => {
@@ -36,9 +44,9 @@ export default function PostsList() {
       <section>
         <div class="py-20 bg-white min-h-screen radius-for-skewed ">
           <div class="container mx-auto px-4">
+
             <div class="mb-16 flex flex-wrap items-center">
-              
-              <div class="w-full lg:w-1/2 ">
+              <div class="w-full lg:w-1/2 fixed">
                 <span class="text-slate-700 font-bold">
                   Latest Posts from our awesome Authors
                 </span>
@@ -46,25 +54,20 @@ export default function PostsList() {
                   Latest Posts
                 </h2>
               </div>
-              
-              <div class=" block text-right w-1/2 ">
-                {/* View All */}
-                <button
-                  onClick={() => dispatch(fetchPostsAction())}
-                  class="cursor-pointer py-2 px-3 mb-4 rounded text-white font-bold bg-gray-700 "
-                 > View All Posts
-                </button>
-              </div>
-              
             </div>
-            
+
             <div class="flex flex-wrap -mx-3">
               <div class="mb-8 lg:mb-0 w-full lg:w-1/4 px-3">
-                <div class="py-4 px-6 bg-gray-50 shadow rounded border border-gray-300 sticky top-0 ">
+                <div class="py-4 px-6 bg-gray-50 shadow rounded border border-gray-300 fixed ">
                   <h4 class="mb-4 text-slate-700 font-bold uppercase flex justify-center">
                     Categories
                   </h4>
-                  <ul className='overflow-auto h-72'>
+                  <ul className="overflow-auto h-72">
+                    <p
+                      onClick={() => dispatch(fetchPostsAction())}
+                      className="cursor-pointer py-2 px-3 mb-4 rounded text-white font-bold bg-gray-700 flex justify-center">
+                      View All Posts
+                    </p>
                     {catLoading ? (
                       <LoadingComponent />
                     ) : catAppErr || catServerErr ? (
@@ -74,10 +77,14 @@ export default function PostsList() {
                     ) : categoryList?.length <= 0 ? (
                       <h1>No Category Found</h1>
                     ) : (
-                      categoryList?.map(category => (
+                      categoryList?.map((category) => (
                         <li>
-                          <p onClick={()=>dispatch(fetchPostsAction(category.title))}
-                          className="cursor-pointer py-2 px-3 mb-4 rounded text-white font-bold bg-gray-700 flex justify-center">
+                          <p
+                            onClick={() =>
+                              dispatch(fetchPostsAction(category.title))
+                            }
+                            className="cursor-pointer py-2 px-3 mb-4 rounded text-white font-bold bg-gray-700 flex justify-center"
+                          >
                             {category?.title}
                           </p>
                         </li>
@@ -90,16 +97,20 @@ export default function PostsList() {
               <div class="w-full lg:w-3/4 px-3 ">
                 {/* Post goes here */}
 
-                {  appErr || serverErr ? (
+                {appErr || serverErr ? (
                   <h1 className="text-red-600 text-2xl text-center">
                     {serverErr} {appErr}
                   </h1>
                 ) : postLists?.length <= 0 ? (
-                  <h1 className='text-3xl font-bold text-center'>No Posts Found</h1>
+                  <h1 className="text-3xl font-bold text-center">
+                    No Posts Found
+                  </h1>
                 ) : (
                   postLists?.map((post) => (
-                    <div key={post.id} 
-                      class="flex flex-wrap bg-white -mx-3  lg:mb-6">
+                    <div
+                      key={post.id}
+                      class="flex flex-wrap bg-white -mx-3  lg:mb-6"
+                    >
                       <div class="mb-10  w-full lg:w-1/4 px-3">
                         <div>
                           {/* Post image */}
@@ -116,10 +127,12 @@ export default function PostsList() {
                           <div className="flex flex-row justify-center items-center ml-4 mr-2 pb-2 pt-1">
                             {/* Togle like  */}
                             <div className="">
-                              <ThumbUpIcon onClick={() =>
+                              <ThumbUpIcon
+                                onClick={() =>
                                   dispatch(toggleAddLikesToPost(post?._id))
-                                } 
-                                className="h-7 w-7 text-gray-600 cursor-pointer" />
+                                }
+                                className="h-7 w-7 text-gray-600 cursor-pointer"
+                              />
                             </div>
                             <div className="pl-1 text-gray-600">
                               {post?.likes?.length}
@@ -128,10 +141,12 @@ export default function PostsList() {
                           {/* Dislike */}
                           <div className="flex flex-row  justify-center items-center ml-4 mr-4 pb-2 pt-1">
                             <div>
-                              <ThumbDownIcon onClick={() =>
+                              <ThumbDownIcon
+                                onClick={() =>
                                   dispatch(toggleAddDisLikesToPost(post?._id))
-                                }  
-                              className="h-7 w-7 cursor-pointer text-gray-600" />
+                                }
+                                className="h-7 w-7 cursor-pointer text-gray-600"
+                              />
                             </div>
                             <div className="pl-1 text-gray-600">
                               {post?.disLikes?.length}
@@ -159,7 +174,10 @@ export default function PostsList() {
                         <p class="text-black truncate ">{post?.description}</p>
 
                         {/* Read more */}
-                        <Link to={`/posts/${post.id}`} className="text-indigo-500 hover:underline">
+                        <Link
+                          to={`/posts/${post.id}`}
+                          className="text-indigo-500 hover:underline"
+                        >
                           Read More..
                         </Link>
 
@@ -175,21 +193,21 @@ export default function PostsList() {
                             </div>
                           </div>
                           <div className="ml-3">
-                            
                             <p className="text-sm font-medium text-gray-900">
-                              <Link  to={`/profile/${post?.user?._id}`} 
-                                className="text-slate-800 hover:underline ">
+                              <Link
+                                to={`/profile/${post?.user?._id}`}
+                                className="text-slate-800 hover:underline "
+                              >
                                 {post?.user?.firstName} {post?.user?.lastName}
                               </Link>
                             </p>
-                            
+
                             <div className="flex space-x-1 text-sm text-gray-500 font-semibold">
                               <time>
                                 <DateFormatter date={post?.createdAt} />
                               </time>
                               <span aria-hidden="true">&middot;</span>
                             </div>
-
                           </div>
                         </div>
                       </div>

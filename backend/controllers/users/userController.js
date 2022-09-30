@@ -226,7 +226,7 @@ const unfollowUser = expressAsyncHandler(async (req, res) => {
 
 //Block user
 const blockUser = expressAsyncHandler(async (req, res) => {
-  const { id } = req.params; 
+  const {id} = req.params; 
   validateMongodbId(id);
  
   const user = await User.findByIdAndUpdate(

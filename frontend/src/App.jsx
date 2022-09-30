@@ -24,6 +24,8 @@ import UsersList from "./pages/Users/UsersList/UsersList";
 import UpdatePassword from "./pages/Users/PasswordManagement/UpdatePassword";
 import ResetPassword from "./pages/Users/PasswordManagement/ResetPassword";
 import ResetPasswordForm from "./pages/Users/PasswordManagement/ResetPasswordForm";
+import { LoadingUsers } from "./pages/Users/UsersList/LoadingUsers";
+import CategoryDeleteModal from "./pages/Navigation/Alerts/CategoryDeleteModal";
 
 function App() {
   return (
@@ -52,6 +54,12 @@ function App() {
           <Route path='/update-category/:id' element={
             <AdminProtected>
               <UpdateCategory/>
+            </AdminProtected>
+          }/>
+
+          <Route path='/delete-category-modal' element={
+            <AdminProtected>
+              <CategoryDeleteModal/>
             </AdminProtected>
           }/>
 

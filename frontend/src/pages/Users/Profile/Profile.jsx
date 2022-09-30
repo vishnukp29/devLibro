@@ -188,21 +188,25 @@ export default function Profile() {
                                   </Link>
                                 )}
                               </>
+
                               {/* Send Mail */}
-                              <Link
+                              {!isLoginUser && (
+                                <Link
                                 to="/send-email"
                                 state={{
                                   email: profile?.email,
                                   id: profile?.id,
                                 }}
-                                className="inline-flex justify-center bg-white px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700  hover:bg-gray-50 focus:outline-none "
-                              >
+                                className="inline-flex justify-center bg-white px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700  hover:bg-gray-50 focus:outline-none ">
                                 <MailIcon
                                   className="-ml-1 mr-2 h-5 w-5 text-gray-400"
                                   aria-hidden="true"
                                 />
                                 <span className="">Send Message</span>
                               </Link>
+                              )}
+                              
+
                             </div>
                           </div>
                         </div>
@@ -215,13 +219,13 @@ export default function Profile() {
                     </div>
                     {/* Tabs */}
                     <div className="mt-6 sm:mt-2 2xl:mt-5">
-                      <div className="border-b border-red-900">
+                      {/* <div className="border-b border-red-900">
                         <div className="max-w-5xl mx-auto "></div>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="flex justify-center place-items-start flex-wrap  md:mb-0">
                       <div className="w-full md:w-1/3 px-4 mb-4 md:mb-0">
-                        <h1 className="text-center text-xl border-gray-500 mb-2 border-b-2">
+                        <h1 className="text-center text-xl bg-gray-100 mb-2 p-4">
                           Who viewed my profile : {profile?.viewedBy?.length}
                         </h1>
 
@@ -256,7 +260,7 @@ export default function Profile() {
                       </div>
                       {/* All my Post */}
                       <div className="w-full md:w-2/3 px-4 mb-4 md:mb-0">
-                        <h1 className="text-center text-xl border-gray-500 mb-2 border-b-2">
+                        <h1 className="text-center text-xl bg-gray-100 mb-2 p-4">
                           My Posts: {profile?.posts?.length}
                         </h1>
                         {/* Loop here */}
@@ -264,7 +268,7 @@ export default function Profile() {
                           <h2 className="text-center text-xl">No Post Found</h2>
                         ) : (
                           profile?.posts.map((post) => (
-                            <div className="flex flex-wrap  -mx-3 mt-3  lg:mb-6">
+                            <div className="flex flex-wrap  -mx-3 mt-3  lg:mb-6 p-4">
                               <div className="mb-2   w-full lg:w-1/4 px-3">
                                 <Link to="">
                                   <img
