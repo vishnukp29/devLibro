@@ -31,7 +31,8 @@ const UpdateCategory = () => {
 
   //get data from store
   const state = useSelector((state) => state?.category);
-  const { loading, appErr, serverErr, category, isDeleted } = state;
+
+  const { loading, appErr, serverErr, category} = state;
   console.log(state?.category?.title);
 
   const formik = useFormik({
@@ -49,10 +50,6 @@ const UpdateCategory = () => {
     validationSchema: formSchema,
   });
 
-  if (isDeleted) {
-    navigate("/category-list");
-  }
-
   return (
     <section className="min-h-screen  py-20 2xl:py-40 bg-white overflow-hidden ">
       <div className="container px-4 mx-auto">
@@ -60,7 +57,7 @@ const UpdateCategory = () => {
           <div>
             <BookOpenIcon className="mx-auto h-12 w-auto" />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Update Category
+              Update or Delete Category
             </h2>
 
             <p className="mt-2 text-center text-sm text-gray-600">

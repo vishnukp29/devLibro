@@ -13,6 +13,10 @@ import DateFormatter from "../../utils/DateFormatter";
 import LoadingComponent from "../../utils/LoadingComponent";
 
 export default function PostsList() {
+  // Select user from from store
+  const user = useSelector((state) => state?.users);
+  const { userAuth } = user;
+
   //select post from store
   const post = useSelector((state) => state?.post);
   const { postLists, loading, appErr, serverErr, likes, disLikes } = post;
@@ -44,7 +48,6 @@ export default function PostsList() {
       <section>
         <div class="py-20 bg-white min-h-screen radius-for-skewed ">
           <div class="container mx-auto px-4">
-
             <div class="mb-16 flex flex-wrap items-center">
               <div class="w-full lg:w-1/2 fixed">
                 <span class="text-slate-700 font-bold">
@@ -65,7 +68,8 @@ export default function PostsList() {
                   <ul className="overflow-auto h-72">
                     <p
                       onClick={() => dispatch(fetchPostsAction())}
-                      className="cursor-pointer py-2 px-3 mb-4 rounded text-white font-bold bg-gray-700 flex justify-center">
+                      className="cursor-pointer py-2 px-3 mb-4 rounded text-white font-bold bg-gray-700 flex justify-center"
+                    >
                       View All Posts
                     </p>
                     {catLoading ? (
@@ -93,6 +97,9 @@ export default function PostsList() {
                   </ul>
                 </div>
               </div>
+
+              {/* Mobile View */}
+              <div></div>
 
               <div class="w-full lg:w-3/4 px-3 ">
                 {/* Post goes here */}
@@ -126,28 +133,53 @@ export default function PostsList() {
                           {/* Likes */}
                           <div className="flex flex-row justify-center items-center ml-4 mr-2 pb-2 pt-1">
                             {/* Togle like  */}
-                            <div className="">
-                              <ThumbUpIcon
-                                onClick={() =>
-                                  dispatch(toggleAddLikesToPost(post?._id))
-                                }
-                                className="h-7 w-7 text-gray-600 cursor-pointer"
-                              />
-                            </div>
+                            {post?.likes.includes(userAuth?._id) ? (
+                              <div className="">
+                                <ThumbUpIcon
+                                  onClick={() =>
+                                    dispatch(toggleAddLikesToPost(post?._id))
+                                  }
+                                  className="h-7 w-7 text-blue-600 cursor-pointer"
+                                />
+                              </div>
+                            ) : (
+                              <div className="">
+                                <ThumbUpIcon
+                                  onClick={() =>
+                                    dispatch(toggleAddLikesToPost(post?._id))
+                                  }
+                                  className="h-7 w-7 text-gray-600 cursor-pointer"
+                                />
+                              </div>
+                            )}
+
                             <div className="pl-1 text-gray-600">
                               {post?.likes?.length}
                             </div>
                           </div>
+
                           {/* Dislike */}
                           <div className="flex flex-row  justify-center items-center ml-4 mr-4 pb-2 pt-1">
-                            <div>
-                              <ThumbDownIcon
-                                onClick={() =>
-                                  dispatch(toggleAddDisLikesToPost(post?._id))
-                                }
-                                className="h-7 w-7 cursor-pointer text-gray-600"
-                              />
-                            </div>
+                            {post?.disLikes.includes(userAuth?._id) ? (
+                              <div>
+                                <ThumbDownIcon
+                                  onClick={() =>
+                                    dispatch(toggleAddDisLikesToPost(post?._id))
+                                  }
+                                  className="h-7 w-7 cursor-pointer text-red-600"
+                                />
+                              </div>
+                            ) : (
+                              <div>
+                                <ThumbDownIcon
+                                  onClick={() =>
+                                    dispatch(toggleAddDisLikesToPost(post?._id))
+                                  }
+                                  className="h-7 w-7 cursor-pointer text-gray-600"
+                                />
+                              </div>
+                            )}
+
                             <div className="pl-1 text-gray-600">
                               {post?.disLikes?.length}
                             </div>

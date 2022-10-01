@@ -178,10 +178,12 @@ const AdminNavbar = ({isLogin}) => {
             {/* Mobile view */}
             <div className="pt-4 pb-3 border-t border-gray-700">
               <div className="flex items-center px-5 sm:px-6">
+
                 <div className="flex-shrink-0">
                   {/* Image */}
                   <img className="h-10 w-10 rounded-full" src={isLogin?.profilePicture} alt="" />
                 </div>
+
                 <div className="ml-3">
                   <div className="text-base font-medium text-black">
                   {isLogin?.firstName} {isLogin?.lastName}
@@ -190,6 +192,7 @@ const AdminNavbar = ({isLogin}) => {
                   {isLogin?.email}
                   </div>
                 </div>
+
               </div>
 
               <div className="mt-3 px-2 space-y-1 sm:px-3">
@@ -203,7 +206,9 @@ const AdminNavbar = ({isLogin}) => {
                   </a>
                 ))}
               </div>
+              
             </div>
+            
           </Disclosure.Panel>
         </>
       )}

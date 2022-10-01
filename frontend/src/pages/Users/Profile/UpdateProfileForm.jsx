@@ -54,6 +54,7 @@ const UpdateProfileForm = () => {
   return (
     <section className="min-h-screen  py-20 2xl:py-40 bg-white overflow-hidden">
       <div className="container px-4 mx-auto">
+        
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h3 className="mt-6 text-center text-3xl font-extrabold text-black">
             Hey {userDetails?.firstName}, do you want to update your profile?

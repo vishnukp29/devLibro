@@ -1,17 +1,28 @@
-import React from "react";
-import { Link} from "react-router-dom";
+import React, {useState} from "react";
+import { Link } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux'
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
 import Moment from "react-moment";
 import { deleteCommentAction } from "../../redux/slices/comments/commentSlices";
+import EditComment from "../Modal/EditComment";
 
 export default function CommentsList({comments,postId}) {
+  
   const user = useSelector(state => state?.users);
   const { userAuth } = user;
   const isLoginuser = userAuth?._id;
- 
+
   // Dispatch
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false)
+  const [editId,setEditId]=useState("")
+  const [editValue,setEditValue]=useState("")
+  const editComment=(id,description)=>{
+    setOpen(true)
+    setEditId(id)
+    setEditValue(description)
+  }
+ 
   return (
     <div>
       <ul className="divide-y bg-gray-700 w-96 divide-gray-200 p-3 mt-5 border rounded-lg">
@@ -56,11 +67,12 @@ export default function CommentsList({comments,postId}) {
                       {isLoginuser === comment?.user?._id ? (
                         <p class="flex">
                           
-                          <Link
-                            to={`/update-comment/${comment?._id}`}
+                          <button
+                            // 
+                            onClick={()=>editComment(comment?._id,comment?.description)}
                               class="p-3">
                             <PencilAltIcon class="h-5 mt-3 text-gray-100" />
-                          </Link>
+                          </button>
                           
                           <button
                             onClick={() =>
@@ -79,6 +91,9 @@ export default function CommentsList({comments,postId}) {
           )}
         </>
       </ul>
+      <div>
+        <EditComment open={open} setOpen={setOpen} commentId={editId} value={editValue} />
+      </div>
     </div>
   );
 }

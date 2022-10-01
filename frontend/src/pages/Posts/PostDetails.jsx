@@ -20,10 +20,10 @@ const PostDetails = () => {
 
     // Comment
     const comment = useSelector(state => state?.comment);
-    const {commentCreated, commentDeleted}=comment
+    const {commentCreated, commentDeleted, commentUpdated}=comment
     useEffect(() => {
       dispatch(fetchPostDetails(id));
-    }, [id, dispatch,commentCreated,commentDeleted]);
+    }, [id, dispatch,commentCreated,commentDeleted, commentUpdated]);
 
     //Get login user
     const user = useSelector(state => state.users);
