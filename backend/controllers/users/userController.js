@@ -379,9 +379,6 @@ const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
   //Find the login user
   const { _id } = req.user;
 
-  // Ckeck user is blocked
-  blockUser(req.user)
-
   //1. Get the Path to image
   const localPath = `public/images/profile/${req.file.filename}`;
 

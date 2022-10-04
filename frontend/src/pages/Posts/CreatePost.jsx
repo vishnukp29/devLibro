@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState, useMemo, useRef, useEffect} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Dropzone from "react-dropzone";
@@ -15,6 +15,7 @@ const formSchema = Yup.object().shape({
   category: Yup.object().required("Category is required"),
   image: Yup.string().required("Image is required"),
 });
+
 // CSS for Dropzone
 const Container = styled.div`
   flex: 1;
@@ -38,7 +39,12 @@ export default function CreatePost() {
   //select store data
   const post = useSelector((state) => state?.post);
   const { isCreated, loading, appErr, serverErr } = post;
-  console.log(post);
+
+  const user=useSelector(state=>state.users)
+  const {userAuth}=user
+  
+  // preview
+  const [preview,setPreview]=useState('')
 
   //formik
   const formik = useFormik({
@@ -60,9 +66,24 @@ export default function CreatePost() {
     },
     validationSchema: formSchema,
   });
+
   if (isCreated) {
     navigate("/posts");
   } 
+
+  let image = formik?.values?.image;
+	useEffect(() => {
+		if (image) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setPreview(reader.result);
+			};
+			reader.readAsDataURL(image);
+		} else {
+			setPreview(null);
+		}
+	}, [image]);
+  
   return (
     <section className="min-h-screen  py-20 2xl:py-40 bg-white overflow-hidden">
       <div className="container px-4 mx-auto">
@@ -156,31 +177,37 @@ export default function CreatePost() {
                 >
                   Select Image
                 </label>
-                <Container className="container bg-gray-700">
-                  <Dropzone
-                    onBlur={formik.handleBlur("image")}
-                    accept="image/jpeg, image/png image/webp"
-                    onDrop={(acceptedFiles) => {
-                      formik.setFieldValue("image", acceptedFiles[0]);
-                    }}
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <div className="container">
-                        <div
-                          {...getRootProps({
-                            className: "dropzone",
-                            onDrop: (event) => event.stopPropagation(),
-                          })}
-                        >
-                          <input {...getInputProps()} />
-                          <p className="text-gray-300 text-lg cursor-pointer hover:text-gray-500">
-                            Click here to select image
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </Dropzone>
-                </Container>
+
+                {
+                preview ?<img src={preview} alt='' onClick={()=>{
+                  setPreview(null)
+                 }}/> :<Container className="container bg-gray-700">
+                 <Dropzone
+                   onBlur={formik.handleBlur("image")}
+                   accept="image/jpeg, image/png"
+                   onDrop={acceptedFiles => {
+                     formik.setFieldValue("image", acceptedFiles[0]);
+                   }}
+                 >
+                   {({ getRootProps, getInputProps }) => (
+                     <div className="container">
+                       <div
+                         {...getRootProps({
+                           className: "dropzone",
+                           onDrop: event => event.stopPropagation(),
+                         })}
+                       >
+                         <input {...getInputProps()} />
+                         <p className="text-gray-300 text-lg cursor-pointer hover:text-gray-500">
+                           Click here to select image
+                         </p>
+                       </div>
+                     </div>
+                   )}
+                 </Dropzone>
+               </Container>
+              }
+
               </div>
               <div>
                 {/* Submit btn */}

@@ -14,7 +14,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams,Link } from "react-router-dom";
 
 const formSchema = Yup.object({
   title: Yup.string().required("Title is required"),
@@ -119,11 +119,11 @@ const UpdateCategory = () => {
                 ) : (
                   <button
                     type="submit"
-                    className=" group relative w-full flex justify-center py-2 px-4 border border-transparent text-md font-semibold rounded-md text-white bg-slate-800 hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black shadow-lg"
+                    className=" group relative w-full flex justify-center py-2 px-4 border border-transparent text-md font-semibold rounded-md text-white bg-green-800 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black shadow-lg"
                   >
                     <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                       <PlusCircleIcon
-                        className="h-5 w-5 text-yellow-500 group-hover:text-zinc-50"
+                        className="h-5 w-5 text-white group-hover:text-zinc-50"
                         aria-hidden="true"
                       />
                     </span>
@@ -135,9 +135,9 @@ const UpdateCategory = () => {
           </form>
 
           <button
-            onClick={() => dispatch(deleteCategoryAction(id))}
+            
             type="submit"
-            className=" mt-2 group relative w-full flex justify-center py-2 px-4 border border-transparent text-md font-semibold rounded-md text-white bg-black hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg">
+            className=" mt-2 group relative w-full flex justify-center py-2 px-4 border border-transparent text-md font-semibold rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg">
             <span className="absolute left-0 inset-y-0 flex items-center pl-3">
               <ArchiveIcon
                 className="h-5 w-5 text-zinc-100 group-hover:text-zinc-50"
@@ -146,6 +146,13 @@ const UpdateCategory = () => {
             </span>
             Delete
           </button>
+
+          <Link
+            to='/category-list'
+            type="submit"
+            className=" mt-2 group relative w-full flex justify-center py-2 px-4 border border-transparent text-md font-semibold rounded-md text-white bg-slate-800 hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg">
+           Cancel
+          </Link>
         </div>
       </div>
     </section>

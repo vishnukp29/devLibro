@@ -117,11 +117,13 @@ const updatePost = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// Delete Post
+
 const deletePost = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongodbId(id);
   try {
-    const post = await Post.findOneAndDelete(id);
+    const post = await Post.findByIdAndDelete(id);
     res.json(post);
   } catch (error) {
     res.json(error);
